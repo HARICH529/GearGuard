@@ -74,7 +74,9 @@ const getKanbanData = async (req, res) => {
     
     // If user is a technician, only show requests from their department
     if (req.user.role === 'Technician') {
+      console.log('Technician department:', req.user.department);
       const equipmentInDept = await Equipment.find({ department: req.user.department });
+      console.log('Equipment found in department:', equipmentInDept.length);
       const equipmentIds = equipmentInDept.map(eq => eq._id);
       filter.equipment = { $in: equipmentIds };
     }
@@ -82,6 +84,8 @@ const getKanbanData = async (req, res) => {
     const requests = await MaintenanceRequest.find(filter)
       .populate('equipment team assignedTechnician createdBy')
       .sort({ createdAt: -1 });
+
+    console.log('Requests found:', requests.length);
 
     const kanbanData = {
       'New': requests.filter(r => r.status === 'New'),
