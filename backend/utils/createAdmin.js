@@ -6,9 +6,9 @@ const createAdminUser = async () => {
     
     if (!adminExists) {
       await User.create({
-        username: 'Hari Krishna',
-        email: 'harikrishnachunduri123@gmail.com',
-        password: 'Hari@2609',
+        username: process.env.ADMIN_USERNAME || 'admin',
+        email: process.env.ADMIN_EMAIL || 'admin@example.com',
+        password: process.env.ADMIN_PASSWORD || 'defaultPassword',
         role: 'Admin',
         department: 'IT'
       });
