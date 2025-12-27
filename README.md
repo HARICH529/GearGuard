@@ -485,12 +485,4 @@ ADMIN_EMAIL=admin@company.com
 ADMIN_PASSWORD=secure-admin-password
 ```
 
----
-
-## 📞 Support
-
-For support and questions, please contact the development team or create an issue in the repository.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+----------------------------------------------------------------------------------------------------------------------------
