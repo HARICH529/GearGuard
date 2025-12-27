@@ -70,7 +70,16 @@ const updateStatus = async (req, res) => {
 
 const getKanbanData = async (req, res) => {
   try {
-    const requests = await MaintenanceRequest.find()
+    let filter = {};
+    
+    // If user is a technician, only show requests from their department
+    if (req.user.role === 'Technician') {
+      const equipmentInDept = await Equipment.find({ department: req.user.department });
+      const equipmentIds = equipmentInDept.map(eq => eq._id);
+      filter.equipment = { $in: equipmentIds };
+    }
+
+    const requests = await MaintenanceRequest.find(filter)
       .populate('equipment team assignedTechnician createdBy')
       .sort({ createdAt: -1 });
 
@@ -89,10 +98,19 @@ const getKanbanData = async (req, res) => {
 
 const getCalendarData = async (req, res) => {
   try {
-    const requests = await MaintenanceRequest.find({
+    let filter = {
       category: 'Preventive',
       scheduledDate: { $exists: true }
-    })
+    };
+    
+    // If user is a technician, only show requests from their department
+    if (req.user.role === 'Technician') {
+      const equipmentInDept = await Equipment.find({ department: req.user.department });
+      const equipmentIds = equipmentInDept.map(eq => eq._id);
+      filter.equipment = { $in: equipmentIds };
+    }
+
+    const requests = await MaintenanceRequest.find(filter)
     .populate('equipment team assignedTechnician')
     .sort({ scheduledDate: 1 });
 
